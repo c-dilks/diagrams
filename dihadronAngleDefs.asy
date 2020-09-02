@@ -2,11 +2,16 @@
 settings.render=16;
 
 import three;
-size(4cm,0);
-//size(100);
+//size(4cm,0);
+size(100);
+
+// pens
+pen penSupport = black + linetype(new real[] {2,3}) + linewidth(0.25);
+pen penPlane = black + linewidth(0.15);
 
 // coordinate system
-draw(O--2X ^^ O--2Y ^^ O--2Z);
+//draw(O--2X ^^ O--2Y ^^ O--2Z);
+draw(O--2X,penSupport);
 
 // virtual photon
 triple q = X;
@@ -16,7 +21,9 @@ triple b = X-Y; // beam electron
 triple l = -X-Y; // scattered electron
 
 // hadron momenta
-triple P1 = X + 0.3Y + 0.4Z;
+//triple P1 = X + 0.3Y + 0.4Z; // orig
+//triple P2 = 0.8X + 0.5Y + 0.2Z; // orig
+triple P1 = X - 0.3Y + 0.4Z;
 triple P2 = 0.8X + 0.5Y + 0.2Z;
 
 // dihadron momenta
@@ -33,10 +40,13 @@ draw(O--Ph, black, Arrow3(size=3)); // Ph
 draw(shift(P2)*(O--R), black, Arrow3(size=3)); // R
 
 // draw planes
-draw(surface(plane(4X,4Y,-2*(X+Y))),opacity(0.5)+grey,black,light=nolight); // reaction
-draw(surface(plane(3Y,3Z,-1.5*(Y+Z))),opacity(0.5)+magenta,black,light=nolight); // perp
-//draw(surface(plane(2q,2Ph,-Ph)),opacity(0.5)+green,black,light=nolight); // Ph x q
-draw(surface(plane(4P1,4P2,-Ph)),opacity(0.5)+cyan,black,light=nolight); // P1 x P2
+draw(surface(plane(4X,4Y,-2*(X+Y))),opacity(0.5)+grey,penPlane,light=nolight); // reaction
+draw(surface(plane(3Y,3Z,-1.5*(Y+Z))),opacity(0.5)+magenta,penPlane,light=nolight); // perp
+draw(surface(plane(2q,2Ph,-Ph)),opacity(0.5)+green,penPlane,light=nolight); // Ph x q
+draw(surface(plane(4P1,4P2,-Ph)),opacity(0.5)+cyan,penPlane,light=nolight); // P1 x P2
+// - intersections
+draw(-1.5Y--1.5Y,penPlane); // perp & reaction
+draw(O--(-Ph+q*dot(Ph,q)/dot(q,q)),penPlane); // perp & Ph x q
 
 // phiH
 triple cross_ql = cross(q,l); // q x l
@@ -48,7 +58,8 @@ path3 arcH = shift(X*Ph.x*arcHpos) *
              rotate(-90,X) *
              arc(O,cross_ql*arcHpos,cross_qPh*arcHpos); // arcH
 draw(arcH,green); // arcH
-draw(X*Ph.x*arcHpos--arcpoint(arcH,0)); // arcH horizontal radius
+// - supports
+draw(X*Ph.x*arcHpos--arcpoint(arcH,0),penSupport); // arcH horizontal radius
 
 // R projected to T frame (and perp frame)
 triple RT = R - Ph * dot(R,Ph)/dot(Ph,Ph); // RT
@@ -65,6 +76,7 @@ path3 arcR = /*shift(X*Ph.x*arcRpos) * */
              rotate(-90,X) *
              arc(O,cross_qRT*arcRpos,cross_ql*arcRpos); // arcH
 draw(arcR,blue); // arcH
-draw(O--arcpoint(arcR,length(arcR))); // arcR horizontal radius
+// - supports
+draw(O--arcpoint(arcR,length(arcR)),penSupport); // arcR horizontal radius
 draw(RT--arcpoint(arcR,0)); // RT to RT_perp line
-draw(O--arcpoint(arcR,0)); // arcR RT_perp radius
+draw(O--arcpoint(arcR,0),penSupport); // arcR RT_perp radius
