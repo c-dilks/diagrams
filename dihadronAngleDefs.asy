@@ -16,7 +16,7 @@ real lwPlane = 0.4;
 pen penSupport = black + linetype(new real[] {2,3}) + linewidth(lwSupport);
 pen penPlane = black + linewidth(lwPlane);
 pen penVec = linewidth(4lwSupport);
-pen penArc = red + linewidth(lwSupport);
+pen penArc = red + linewidth(4*lwSupport);
 
 // coordinate system
 //draw(O--1.5X ^^ O--1.5Y ^^ O--1.5Z,red+linewidth(1));
@@ -38,16 +38,13 @@ triple b = X-Y; // beam electron
 triple l = -X-Y; // scattered electron
 
 // hadron momenta
-//triple P1 = X + 0.3Y + 0.4Z; // orig
-//triple P2 = 0.8X + 0.5Y + 0.2Z; // orig
-//triple P1 = X - 0.3Y + 0.6Z;
-//triple P2 = 0.8X + 0.8Y + 0.3Z;
-triple P1 = 0.5X - 0.4Y + 0.7Z;
-triple P2 = 0.4X + 0.6Y + 0.2Z;
+triple P1 = 0.5X - 0.4Y + 0.7Z; // orig
+//triple P1 = 0.5X - 0.4Y + 1.2Z; // test
+triple P2 = 0.4X + 0.6Y + 0.2Z; // orig
 
 // dihadron momenta
 triple Ph = P1 + P2;
-triple R = P1 - P2;
+triple R = (P1 - P2)/2;
 
 // draw momenta
 real sa=10; // arrow size
@@ -58,7 +55,8 @@ draw(shift(-q)*qPhot, purple+penVec, Arrow3(size=sa)); // q
 draw(O--P1, black+penVec, Arrow3(size=sa)); // P1
 draw(O--P2, black+penVec, Arrow3(size=sa)); // P2
 draw(O--Ph, deepgreen+penVec, Arrow3(size=sa)); // Ph
-draw(shift(P2)*(O--R), orange+penVec, Arrow3(size=sa)); // R
+draw(shift(P2)*(O--2R), orange+penVec, Arrow3(size=sa)); // R
+draw((O--R), red+penVec, Arrow3(size=sa)); // R
 
 // momentum projections to T frame and perp frame
 triple RT = R - Ph * dot(R,Ph)/dot(Ph,Ph); // RT
@@ -66,7 +64,8 @@ triple RTPerp = RT - q * dot(RT,q)/dot(q,q); // RT, projected to perp plane
 triple RPerp = R - q * dot(R,q)/dot(q,q); // RPerp
 triple PhPerp = Ph-q*dot(Ph,q)/dot(q,q); // PhPerp
 draw((O--RT), blue+penVec, Arrow3(size=sa)); // RT
-//draw((O--RPerp), red, Arrow3(size=sa)); // RPerp
+draw(R--RT,penSupport);
+//draw((O--RPerp), magenta, Arrow3(size=sa)); // RPerp
 
 // draw planes
 /* reaction plane */
@@ -97,9 +96,10 @@ draw(
 /* perp plane */
 //draw(surface(plane(2.5Y,2.5Z,-1.25*(Y+Z))),opacity(0.5)+magenta,penPlane,light=nolight);
 
-// intersections of planes (keyword DANGER means it's hard to calculate, so I did it by hand)
+// intersections of planes
+// (keyword MANUAL means it's hard to calculate, so it was adjusted by hand)
 draw(O--1.5q,penPlane); // (Ph x q) & reaction
-//draw(O--Ph,penPlane); // (Ph x q) & (P1 x P2)
+draw(O--1.35Ph/length(Ph),penPlane); // (Ph x q) & (P1 x P2) // MANUAL
 draw(-1.25*S/length(S)--1.25*S/length(S),penPlane); // (P1 x P2) & reac
 //draw(-1.25Y--1.25Y,penPlane); // perp & reaction
 
@@ -138,18 +138,22 @@ real sr = 0.1;
 path3 rightang = (0,-sr,0)--(sr,-sr,0)--(sr,0,0);
 draw(rightang,black+linewidth(lwSupport)); // for arcR
 draw(shift(X*Ph.x*arcHpos)*rightang,black+linewidth(lwSupport)); // for arcH
+draw(RT/10--(RT/10+Ph/10)--Ph/10,black+linewidth(lwSupport)); // for RT and Ph
+draw(0.9RT--
+     shift(0.9RT)*0.4(R-RT)--
+     shift(0.9RT+0.4(R-RT))*0.1RT,black+linewidth(lwSupport)); // for R projected to RT
 
 // labels
-transform ls = scale(0.8); // font size
-label(ls*"$\phi_h$",shift(0.10Z-0.07Y)*arcpoint(arcH,0)); // phiH
-label(ls*"$\phi_{R_\perp}$",shift(0.15Z-0.12Y)*arcpoint(arcR,length(arcR))); // phiR
+transform ls = scale(1); // font size
+label(ls*"$\phi_h$",shift(0.20Z-0.07Y)*arcpoint(arcH,0)); // phiH
+label(ls*"$\phi_{R_\perp}$",shift(-0.08Y+0.25Z)*arcpoint(arcR,length(arcR))); // phiR
 label(ls*scale(0.9)*"$P_1$",shift(-0.12Y+0.1X)*P1); // P1
-label(ls*"$P_2$",shift(0.00Y+0.2X)*P2); // P2
-label(ls*scale(0.8)*"$P_h$",shift(0.4X-0.1Y+0.1Z)*Ph); // Ph
-label(ls*scale(0.9)*"$2R$",shift(0.3X+0.2Y+0.05Z)*shift(P2)*R); // R
-label(ls*scale(0.9)*"$R_T$",shift(0.1Y-0.18Z)*RT); // RT
-label(ls*scale(1.2)*"$\ell'$",shift(-0.10Y)*shift(-q)*l); // l
-label(ls*scale(1.6)*"$\ell$",shift(-0.05X+0.10Y)*shift(-q)*-b); // l
+label(ls*"$P_2$",shift(0.00Y+0.1X)*P2); // P2
+label(ls*scale(0.9)*"$P_h$",shift(0.05X-0.1Y-0.1Z)*Ph); // Ph
+label(ls*scale(0.9)*"$2R$",shift(0.3X+0.1Y+0.05Z)*shift(P2)*R); // R
+label(ls*scale(0.9)*"$R_T$",shift(0.2X+0.1Y+0.10Z)*RT); // RT
+label(ls*scale(1.2)*"$\ell'$",shift(-0.07Y)*shift(-q)*l); // l
+label(ls*scale(1.6)*"$\ell$",shift(-0.07X+0.10Y)*shift(-q)*-b); // b
 
 // camera angle
 currentprojection=perspective(
