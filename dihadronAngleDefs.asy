@@ -19,8 +19,7 @@ pen penVec = linewidth(4lwSupport);
 pen penArc = red + linewidth(lwSupport);
 
 // coordinate system
-//draw(O--2X ^^ O--2Y ^^ O--2Z,red);
-draw(O--1.5X,penSupport);
+//draw(O--1.5X ^^ O--1.5Y ^^ O--1.5Z,red+linewidth(1));
 
 // virtual photon (Feynman squiggle)
 triple q = X;
@@ -43,8 +42,8 @@ triple l = -X-Y; // scattered electron
 //triple P2 = 0.8X + 0.5Y + 0.2Z; // orig
 //triple P1 = X - 0.3Y + 0.6Z;
 //triple P2 = 0.8X + 0.8Y + 0.3Z;
-triple P1 = X - 0.3Y + 0.6Z;
-triple P2 = 0.8X + 0.8Y + 0.2Z;
+triple P1 = 0.5X - 0.4Y + 0.7Z;
+triple P2 = 0.4X + 0.6Y + 0.2Z;
 
 // dihadron momenta
 triple Ph = P1 + P2;
@@ -70,28 +69,49 @@ draw((O--RT), blue+penVec, Arrow3(size=sa)); // RT
 //draw((O--RPerp), red, Arrow3(size=sa)); // RPerp
 
 // draw planes
-draw(surface(plane(3X,3Y,-1.5*(X+Y))),opacity(1.0)+lightgrey,penPlane,light=nolight); // reaction
-//draw(surface(plane(2.5Y,2.5Z,-1.25*(Y+Z))),opacity(0.5)+magenta,penPlane,light=nolight); // perp
-draw(surface(shift(-q)*plane(2q,2Ph,-Ph)),opacity(0.5)+green,penPlane,light=nolight); // Ph x q
-draw(surface(plane(2.5P1,2.5P2,-Ph)),opacity(0.5)+cyan,penPlane,light=nolight); // P1 x P2
-// - intersections (keyword DANGER means it's hard to calculate, so I did it by hand)
+/* reaction plane */
+draw(surface(plane(3X,3Y,-1.5*(X+Y))),opacity(1.0)+lightgrey,penPlane,light=nolight);
+/* (Ph x q) plane: start with reaction plane, and rotate it about q until
+ * it intersects with Ph */
+draw(
+  surface(
+    rotate(degrees(atan2(Ph.z,Ph.y)),X)*
+    plane(1.5X,1.5Y,-0.3Y)
+  ),opacity(0.5)+green,penPlane,light=nolight
+);
+/* (P1 x P2) plane: start with the perp plane. We know that (P1 x P2) intersects the 
+ * reaction plane along Z x P1 x P2; denote this cross product as S. Rotate the perp plane
+ * about the Z axis until it intersects with S. Then we need to rotate about the S axis
+ * by 90deg minus the angle between the Z axis and P1 x P2, and the resulting plane will contain
+ * both P1 and P2 */
+triple cross_P1P2 = cross(P1,P2); // P1 x P2
+triple S = cross(Z,cross_P1P2); // useful vector product Z x P1 x P2
+draw(
+  surface(
+    rotate(90-degrees(-acos(dot(cross_P1P2,Z)/(length(cross_P1P2)*length(Z)))),S)*
+    rotate(degrees(-atan2(S.x,S.y)),Z)*
+    plane(2.5Y,2.5Z,-1.25*(Y+Z))
+    /*plane(3P1,3P2,-Ph)*/
+  ),opacity(0.5)+cyan,penPlane,light=nolight
+);
+/* perp plane */
+//draw(surface(plane(2.5Y,2.5Z,-1.25*(Y+Z))),opacity(0.5)+magenta,penPlane,light=nolight);
+
+// intersections of planes (keyword DANGER means it's hard to calculate, so I did it by hand)
+draw(O--1.5q,penPlane); // (Ph x q) & reaction
+//draw(O--Ph,penPlane); // (Ph x q) & (P1 x P2)
+draw(-1.25*S/length(S)--1.25*S/length(S),penPlane); // (P1 x P2) & reac
 //draw(-1.25Y--1.25Y,penPlane); // perp & reaction
-draw(-q--q,penPlane); // (Ph x q) & reaction
-draw(-Ph--Ph,penPlane); // (Ph x q) & (P1 x P2)
-triple cross_ZP1P2 = cross(Z,cross(P1,P2)); // Z x P1 x P2
-draw(-2.5cross_ZP1P2--1.66cross_ZP1P2,penPlane); // (P1 x P2) & reac (DANGER)
-//draw(-PhPerp/1.83--PhPerp/1.83,penPlane); // (Ph x q) & perp (DANGER)
-//draw(-RTPerp*1.12--RTPerp*0.88,penPlane); // (P1 x P2) & perp (DANGER, and a bit wrong)
 
 // phiH
 triple cross_ql = cross(q,l); // q x l
 triple cross_qPh = cross(q,Ph); // q x Ph
 //draw(O--cross_ql, magenta, Arrow3(size=sa)); // q x l
 //draw(O--cross_qPh,  magenta, Arrow3(size=sa)); // q x Ph
-real arcHpos = 0.4; // x position of arcH, w.r.t. Ph x-component
+real arcHpos = 1.2; // x position of arcH, w.r.t. Ph x-component
 path3 arcH = shift(X*Ph.x*arcHpos) * 
              rotate(-90,X) *
-             arc(O,cross_ql/2*arcHpos,cross_qPh/2*arcHpos); // arcH
+             arc(O,cross_ql/4*arcHpos,cross_qPh/4*arcHpos); // arcH
 draw(arcH,penArc); // arcH
 // - supports
 draw(X*Ph.x*arcHpos--arcpoint(arcH,0),penSupport); // arcH horizontal radius
@@ -127,17 +147,15 @@ label(ls*scale(0.9)*"$P_1$",shift(-0.12Y+0.1X)*P1); // P1
 label(ls*"$P_2$",shift(0.00Y+0.2X)*P2); // P2
 label(ls*scale(0.8)*"$P_h$",shift(0.4X-0.1Y+0.1Z)*Ph); // Ph
 label(ls*scale(0.9)*"$2R$",shift(0.3X+0.2Y+0.05Z)*shift(P2)*R); // R
-label(ls*scale(0.9)*"$R_\perp$",shift(0.1Y-0.18Z)*RPerp); // RPerp
+label(ls*scale(0.9)*"$R_T$",shift(0.1Y-0.18Z)*RT); // RT
 label(ls*scale(1.2)*"$\ell'$",shift(-0.10Y)*shift(-q)*l); // l
 label(ls*scale(1.6)*"$\ell$",shift(-0.05X+0.10Y)*shift(-q)*-b); // l
 
 // camera angle
-///*
 currentprojection=perspective(
-camera=(6.14817053411128,-1.9739792180911,2.01951609669298),
-up=(-0.0113332592707233,0.00636119866960834,0.0402663850373713),
-target=(0.0875868959048827,-0.0218834774748546,0.00533301687500609),
-zoom=0.746215396636627,
-angle=18.5487698928139,
+camera=(5.26680633120671,-3.27904704036387,2.68207001822205),
+up=(-0.00200888155472742,0.00157000034913387,0.00579740879648513),
+target=(0.0875868959048818,-0.0218834774748542,0.00533301687500609),
+zoom=0.505067952995518,
+angle=27.1284281286697,
 autoadjust=false);
-//*/
