@@ -149,20 +149,22 @@ draw(0.8RT--
      shift(0.8RT+0.2(P1-RT))*0.2RT,black+linewidth(2*lwSupport)); // for R projected to RT
 
 // labels
-transform ls = scale(1); // font size
-label(ls*"$\phi_h$",shift(0.20Z-0.07Y)*arcpoint(arcH,0)); // phiH
-label(ls*"$\phi_{R_\perp}$",shift(-0.08Y+0.15Z)*arcpoint(arcR,length(arcR))); // phiR
-label(ls*scale(0.9)*"$P_1$",shift(-0.12Y+0.07X-0.05Z)*P1); // P1
-label(ls*"$P_2$",shift(0.00Y+0.1X)*P2); // P2
-label(ls*scale(0.9)*"$P_h$",shift(0.05X-0.1Y+0.10Z)*Ph); // Ph
-label(ls*scale(0.9)*"$2R$",shift(0.1X-0.3Y+0.27Z)*shift(P2)*R); // 2R
-label(ls*scale(0.9)*"$R_T$",shift(0.10X-0.10Y+0.12Z)*RT); // RT
+transform ls = scale(2); // font size
+label(ls*"$\phi_h$",shift(0.30Z-0.16Y)*arcpoint(arcH,0)); // phiH
+label(ls*"$\phi_{R_\perp}$",shift(-0.17Y+0.15Z)*arcpoint(arcR,length(arcR))); // phiR
+label(ls*scale(0.85)*"$P_1$",shift(-0.15Y+0.07X-0.05Z)*P1); // P1
+label(ls*scale(0.8)*"$P_2$",shift(-0.75Y+0.85X+0.6Z)*P2); // P2
+label(ls*scale(0.8)*"$P_h$",shift(-0.05X-0.2Y+0.10Z)*Ph); // Ph
+label(ls*scale(0.8)*"$2R$",shift(0.30X-0.4Y+0.39Z)*shift(P2)*R); // 2R
+label(ls*scale(0.9)*"$R_T$",shift(0.10X-0.20Y+0.12Z)*RT); // RT
 //label(ls*scale(0.9)*"$R$",shift(0.2X-0.15Y+0.15Z)*R); // R
-label(ls*scale(1.2)*"$\ell'$",shift(-0.07Y)*shift(-q)*l); // l
-label(ls*scale(1.6)*"$\ell$",shift(-0.07X+0.10Y)*shift(-q)*-b); // b
-label(ls*"reaction plane",(1.3,-1.3,0.1));
-label(ls*"dihadron plane",(-0.05,-1.1,0.6));
-label(ls*"$q\times P_h$ plane",(0.90,-0.3,1.3));
+label(ls*scale(1.2)*"$\ell'$",shift(-0.1Y)*shift(-q)*l); // l
+label(ls*scale(1.6)*"$\ell$",shift(-0.1X+0.2Y)*shift(-q)*-b); // b
+label(ls*"reaction plane",(1.1,-1.0,0.1));
+label(ls*"dihadron plane",(-0.05,-1.4,1.25));
+draw((-0.05,-1.4,1.14)--(-0.05,-1.2,0.9),black+linewidth(lwSupport));
+label(ls*"$q\times P_h$ plane",(0.90,0.8,1.3));
+draw((0.50,0.8,1.1)--(0.70,0.27,1.1),black+linewidth(1.3*lwSupport));
 
 
 // camera angle
