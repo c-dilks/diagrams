@@ -68,7 +68,7 @@ draw(P1--RT,penSupport);
 
 // draw planes
 /* reaction plane */
-draw(surface(plane(3X,3Y,-1.5*(X+Y))),opacity(1.0)+lightgrey,penPlane,light=nolight);
+draw(surface(plane(3X,3Y,-1.5*(X+Y))),opacity(1.0)+palegrey,penPlane,light=nolight);
 /* (Ph x q) plane: start with reaction plane, and rotate it about q until
  * it intersects with Ph */
 draw(
@@ -76,7 +76,7 @@ draw(
     rotate(degrees(atan2(Ph.z,Ph.y)),X)*
     plane(1.5X,1.5Y,-0.3Y)
   ),
-  opacity(0.5)+green,
+  opacity(0.5)+purple,
   light=nolight,
   penPlane
 );
@@ -94,7 +94,7 @@ draw(
     plane(2.5Y,2.5Z,-1.25*(Y+Z))
     /*plane(3P1,3P2,-Ph)*/
   ),
-  opacity(0.5)+cyan,
+  opacity(0.5)+yellow,
   light=nolight,
   penPlane
 );
