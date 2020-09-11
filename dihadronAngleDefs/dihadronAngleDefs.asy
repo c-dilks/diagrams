@@ -16,7 +16,7 @@ real lwPlane = 0.8;
 pen penSupport = black + linetype(new real[] {2,3}) + linewidth(lwSupport);
 pen penPlane = black + linewidth(lwPlane);
 pen penVec = linewidth(4lwSupport);
-pen penArc = red + linewidth(4*lwSupport);
+pen penArc = deepgray + linewidth(4*lwSupport);
 
 // coordinate system
 //draw(O--1.5X ^^ O--1.5Y ^^ O--1.5Z,red+linewidth(1));
