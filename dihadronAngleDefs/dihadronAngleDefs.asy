@@ -10,7 +10,7 @@ settings.render=20;
 // - 0 = phiH and phiR
 // - 1 = phiH only
 // - 2 = phiR only
-int drawmode = 0;
+int drawmode = 2;
 
 
 import three;
@@ -180,23 +180,19 @@ label(ls*scale(1.6)*"$\ell$",shift(-0.05X+0.05Y+0.10Z)*shift(-q)*-b); // b
 label(ls*scale(0.85)*"$P_1$",shift(-0.05Y+0.05X+0.10Z)*P1); // P1
 label(ls*scale(0.8)*"$P_2$",shift(-0.00Y+0.10X+0.0Z)*P2); // P2
 label(ls*scale(0.8)*"$P_h$",shift(0.05X+0.05Y+0.05Z)*Ph); // Ph
-if(drawmode==0) label(ls1*"reaction plane",(0.85,-0.7,0.1));
+label(ls1*"scattering plane",(0.85,-0.7,0.1));
 if(drawmode==0||drawmode==1) {
   label(ls*"$\phi_h$",shift(0.05X-0.15Y+0.1Z)*arcpoint(arcH,0)); // phiH
-  if(drawmode==0) {
-    label(ls1*"$q\times P_h$ plane",(0.60,1.0,1.07));
-    draw((0.50,0.8,1.0)--(0.20,0.77,0.85),black+linewidth(1.3*lwSupport));
-  }
+  label(ls1*"$q\times P_h$ plane",(0.60,1.0,1.07));
+  draw((0.50,0.8,1.0)--(0.20,0.77,0.85),black+linewidth(1.3*lwSupport));
 }
 if(drawmode==0||drawmode==2) {
   label(ls*"$\phi_{R_\perp}$",shift(0.1X-0.17Y+0.1Z)*arcpoint(arcR,length(arcR))); // phiR
   label(ls*scale(0.8)*"$2R$",shift(0.10X-0.0Y+0.10Z)*shift(P2)*shift(R/2)*R); // 2R
   label(ls*scale(0.9)*"$R_T$",shift(0.10X-0.10Y+0.12Z)*RT); // RT
   //label(ls*scale(0.9)*"$R$",shift(0.2X-0.15Y+0.15Z)*R); // R
-  if(drawmode==0) {
-    label(ls1*"dihadron plane",(-0.07,-1.0,1.10));
-    draw((-0.05,-1.0,1.05)--(-0.45,-0.6,0.7),black+linewidth(lwSupport));
-  }
+  label(ls1*"dihadron plane",(-0.07,-1.0,1.10));
+  draw((-0.05,-1.0,1.05)--(-0.45,-0.6,0.7),black+linewidth(lwSupport));
 }
 
 
