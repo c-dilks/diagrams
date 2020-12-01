@@ -10,7 +10,7 @@ settings.render=20;
 // - 0 = phiH and phiR
 // - 1 = phiH only
 // - 2 = phiR only
-int drawmode = 2;
+int drawmode = 0;
 
 
 import three;
@@ -22,10 +22,15 @@ real lwSupport = 0.8;
 real lwPlane = 0.8;
 pen penSupport = black + linetype(new real[] {2,3}) + linewidth(lwSupport);
 pen penPlane = black + linewidth(lwPlane);
-pen penVec = linewidth(4lwSupport);
+pen penVec = black+linewidth(4lwSupport);
+pen penVec2 = black+linewidth(6lwSupport);
 pen penArc = deepgray + linewidth(4*lwSupport);
 
 // coordinate system
+/* x: along q, oriented toward hadronization side
+   y: (see z)
+   z: points up
+*/
 //draw(O--1.5X ^^ O--1.5Y ^^ O--1.5Z,red+linewidth(1));
 
 // virtual photon (Feynman squiggle)
@@ -56,14 +61,15 @@ triple R = (P1 - P2)/2;
 
 // draw momenta
 real sa=15; // arrow size
-draw(shift(-q)*(O--l), brown+penVec, Arrow3(size=sa)); // l
-draw(shift(-q-0.5X+1.0Y)*(O--b), brown+penVec, Arrow3(size=sa)); // b
+real sa2=19; // arrow size
+draw(shift(-q)*(O--l), penVec, Arrow3(size=sa)); // l
+draw(shift(-q-0.5X+1.0Y)*(O--b), penVec, Arrow3(size=sa)); // b
 //draw(-q--O, purple+penVec, Arrow3(size=sa)); // q
-draw(shift(-q)*qPhot, purple+penVec, Arrow3(size=sa)); // q
-draw(O--P1, black+penVec, Arrow3(size=sa)); // P1
-draw(O--P2, black+penVec, Arrow3(size=sa)); // P2
-draw(O--Ph, brown+penVec, Arrow3(size=sa)); // Ph
-if(drawmode==0||drawmode==2) draw(shift(P2)*(O--2R), brown+penVec, Arrow3(size=sa)); // 2R
+draw(shift(-q)*qPhot, penVec, Arrow3(size=sa)); // q
+draw(O--P1, penVec2, Arrow3(size=sa2)); // P1
+draw(O--P2, penVec2, Arrow3(size=sa2)); // P2
+draw(O--Ph, penVec, Arrow3(size=sa)); // Ph
+if(drawmode==0||drawmode==2) draw(shift(P2)*(O--2R), penVec, Arrow3(size=sa)); // 2R
 //draw((O--R), red+penVec, Arrow3(size=sa)); // R
 
 // momentum projections to T frame and perp frame
@@ -72,7 +78,7 @@ triple RTPerp = RT - q * dot(RT,q)/dot(q,q); // RT, projected to perp plane
 triple RPerp = R - q * dot(R,q)/dot(q,q); // RPerp
 triple PhPerp = Ph-q*dot(Ph,q)/dot(q,q); // PhPerp
 if(drawmode==0||drawmode==2) {
-  draw((O--RT), blue+penVec, Arrow3(size=sa)); // RT
+  draw((O--RT), penVec, Arrow3(size=sa)); // RT
   draw(P1--RT,penSupport);
   //draw((O--RPerp), magenta, Arrow3(size=sa)); // RPerp
 }
@@ -88,7 +94,7 @@ if(drawmode==0||drawmode==1) {
       rotate(degrees(atan2(Ph.z,Ph.y)),X)*
       plane(0.8X,1.5Y,-0.3Y)
     ),
-    opacity(0.5)+purple,
+    opacity(0.6)+purple,
     light=nolight,
     penPlane
   );
@@ -109,7 +115,7 @@ if(drawmode==0||drawmode==2) {
       plane(2.0Y,1.5Z,-1.2*(Y+Z))
       /*plane(3P1,3P2,-Ph)*/
     ),
-    opacity(0.5)+yellow,
+    opacity(0.3)+yellow,
     light=nolight,
     penPlane
   );
@@ -177,19 +183,19 @@ transform ls1 = scale(1.6); // font size
 transform ls2 = scale(1.3); // font size
 label(ls*scale(1.2)*"$\ell'$",shift(-0.1X-0.07Y)*shift(-q)*l); // l
 label(ls*scale(1.6)*"$\ell$",shift(-0.05X+0.05Y+0.10Z)*shift(-q)*-b); // b
-label(ls*scale(0.85)*"$P_1$",shift(-0.05Y+0.05X+0.10Z)*P1); // P1
-label(ls*scale(0.8)*"$P_2$",shift(-0.00Y+0.10X+0.0Z)*P2); // P2
+label(ls*scale(0.85)*"$P_1$",shift(-0.15Y-0.02X+0.06Z)*P1); // P1
+label(ls*scale(0.8)*"$P_2$",shift(-0.10Y+0.00X-0.08Z)*P2); // P2
 label(ls*scale(0.8)*"$P_h$",shift(0.05X+0.05Y+0.05Z)*Ph); // Ph
-label(ls1*"scattering plane",(0.85,-0.7,0.1));
+label(ls1*"scattering plane",(0.75,-0.8,0.1));
 if(drawmode==0||drawmode==1) {
-  label(ls*"$\phi_h$",shift(0.05X-0.15Y+0.1Z)*arcpoint(arcH,0)); // phiH
+  label(ls*"$\phi_h$",shift(0.04X-0.19Y+0.1Z)*arcpoint(arcH,0)); // phiH
   label(ls1*"$q\times P_h$ plane",(0.60,1.0,1.07));
   draw((0.50,0.8,1.0)--(0.20,0.77,0.85),black+linewidth(1.3*lwSupport));
 }
 if(drawmode==0||drawmode==2) {
-  label(ls*"$\phi_{R_\perp}$",shift(0.1X-0.17Y+0.1Z)*arcpoint(arcR,length(arcR))); // phiR
-  label(ls*scale(0.8)*"$2R$",shift(0.10X-0.0Y+0.10Z)*shift(P2)*shift(R/2)*R); // 2R
-  label(ls*scale(0.9)*"$R_T$",shift(0.10X-0.10Y+0.12Z)*RT); // RT
+  label(ls*"$\phi_{R_\perp}$",shift(0.13X-0.24Y+0.1Z)*arcpoint(arcR,length(arcR))); // phiR
+  label(ls*scale(0.8)*"$2R$",shift(0.08X-0.02Y+0.10Z)*shift(P2)*shift(R/2)*R); // 2R
+  label(ls*scale(0.9)*"$R_T$",shift(0.06X-0.10Y+0.12Z)*RT); // RT
   //label(ls*scale(0.9)*"$R$",shift(0.2X-0.15Y+0.15Z)*R); // R
   label(ls1*"dihadron plane",(-0.07,-1.0,1.10));
   draw((-0.05,-1.0,1.05)--(-0.45,-0.6,0.7),black+linewidth(lwSupport));
@@ -197,10 +203,22 @@ if(drawmode==0||drawmode==2) {
 
 
 // camera angle
+/*
+// v4
 currentprojection=perspective(
 camera=(5.4803714231669,-2.89802210221357,2.6968071298109),
 up=(-0.00175367950007216,0.00103016696481459,0.0046146158489891),
 target=(0.08758689590488,-0.0218834774748533,0.00533301687500609),
+zoom=0.50016345138754,
+angle=27.3844768877189,
+viewportshift=(-0.10302734375,-0.0380859375),
+autoadjust=false);
+*/
+// v5
+currentprojection=perspective(
+camera=(3.89842971478195,-4.96831730155558,2.37356934902584),
+up=(-0.00130775267442518,0.00134304696133748,0.00490953396295247),
+target=(0.0875868959048809,-0.0218834774748533,0.00533301687500609),
 zoom=0.50016345138754,
 angle=27.3844768877189,
 viewportshift=(-0.10302734375,-0.0380859375),
