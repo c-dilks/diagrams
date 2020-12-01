@@ -181,7 +181,7 @@ if(drawmode==0||drawmode==2) {
 transform ls = scale(2); // font size
 transform ls1 = scale(1.6); // font size
 transform ls2 = scale(1.3); // font size
-label(ls*scale(1.2)*"$\ell'$",shift(-0.1X-0.07Y)*shift(-q)*l); // l
+label(ls*scale(1.2)*"$\ell'$",shift(-0.1X-0.02Y)*shift(-q)*l); // l
 label(ls*scale(1.6)*"$\ell$",shift(-0.05X+0.05Y+0.10Z)*shift(-q)*-b); // b
 label(ls*scale(0.85)*"$P_1$",shift(-0.15Y-0.02X+0.06Z)*P1); // P1
 label(ls*scale(0.8)*"$P_2$",shift(-0.10Y+0.00X-0.08Z)*P2); // P2
@@ -189,7 +189,7 @@ label(ls*scale(0.8)*"$P_h$",shift(0.05X+0.05Y+0.05Z)*Ph); // Ph
 label(ls1*"scattering plane",(0.75,-0.8,0.1));
 if(drawmode==0||drawmode==1) {
   label(ls*"$\phi_h$",shift(0.04X-0.19Y+0.1Z)*arcpoint(arcH,0)); // phiH
-  label(ls1*"$q\times P_h$ plane",(0.60,1.0,1.07));
+  label(ls*"$q\times P_h$ plane",(0.45,1.0,1.03));
   draw((0.50,0.8,1.0)--(0.20,0.77,0.85),black+linewidth(1.3*lwSupport));
 }
 if(drawmode==0||drawmode==2) {
