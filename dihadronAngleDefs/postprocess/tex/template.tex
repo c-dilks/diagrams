@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}
+\usepackage{setspace} % double space
+\onehalfspacing % 1.5 space
+\usepackage[left=1in,top=1in,right=1in,bottom=1in,nohead,nofoot]{geometry} %margins
+\setlength\footskip{0.25in} % separate page number from last line
+\setlength\parindent{0.5in} % indent paragraphs; first paragraphs are not indented
+\usepackage{epstopdf}
+\usepackage{graphicx}
+
+% begin upright mu (\umu) definition
+%\usepackage{lmodern}
+%\usepackage{textcomp}
+%\DeclareFontFamily{U}{euc}{}
+%\DeclareFontShape{U}{euc}{m}{n}{<-6>eurm5<6-8>eurm7<8->eurm10}{}
+%\DeclareSymbolFont{AMSc}{U}{euc}{m}{n}
+%\DeclareMathSymbol{\umu}{\mathord}{AMSc}{"16}
+% end upright mu
+
+\pagestyle{empty}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+%\usepackage{MnSymbol} % this must be defined after \umu (upright mu)
+
+% use $\HUGE{a+b=c}$ to make equations huge
+\usepackage{environ}
+\NewEnviron{HUGE}{% 
+  \scalebox{5}{$\BODY$} 
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{equation*}
+%\HUGE{\ell}
+%\HUGE{\ell'}
+%\HUGE{P_1}
+%\HUGE{P_2}
+%\HUGE{P_h}
+%\HUGE{2R}
+%\HUGE{R_T}
+%\HUGE{\phi_h}
+%\HUGE{\phi_{R_\perp}}
+%\HUGE{\text{scattering plane}}}
+%\HUGE{\text{dihadron plane}}
+\HUGE{q\times P_h~\text{plane}}
+\end{equation*}
+
+\end{document} 

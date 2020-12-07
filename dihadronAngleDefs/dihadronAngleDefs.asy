@@ -3,7 +3,7 @@
 // note: may need to change permission 'none' to 'read|write' in /etc/ImageMagick-6/policy.xml
 //settings.offline=true;
 /*************/
-settings.render=20;
+settings.render=16;
 
 
 // draw mode: select what gets drawn:
@@ -178,6 +178,7 @@ if(drawmode==0||drawmode==2) {
 }
 
 // labels
+/*
 transform ls = scale(2); // font size
 transform ls1 = scale(1.6); // font size
 transform ls2 = scale(1.3); // font size
@@ -200,6 +201,7 @@ if(drawmode==0||drawmode==2) {
   label(ls1*"dihadron plane",(-0.07,-1.0,1.10));
   draw((-0.05,-1.0,1.05)--(-0.45,-0.6,0.7),black+linewidth(lwSupport));
 }
+*/
 
 
 // camera angle
